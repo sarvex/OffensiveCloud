@@ -24,33 +24,30 @@ def iterateURL(urlNext):
 #Retrieving user email within JSON response based on userPrincipalName value            
 def getUsersEmails(jsonResponse):
     for id in range(0,999):
-        upn = (jsonResponse["value"][id]["userPrincipalName"])
-        if upn:
+        if upn := jsonResponse["value"][id]["userPrincipalName"]:
             usersEmail.add(upn)
         else:
             continue
     urlNext = jsonResponse["@odata.nextLink"]
     iterateURL(urlNext)
-    
+
     print("- 3. Parsing URLs to retrieve additional user's email \n")
     for url in urls:
         r = requests.get(url, headers=auth)
         jsonResponse = r.json()
         try:
             for id in range(0,999):
-                upn = (jsonResponse["value"][id]["userPrincipalName"])
-                if upn:
+                if upn := jsonResponse["value"][id]["userPrincipalName"]:
                     usersEmail.add(upn)
                 else:
                     continue
         except:
             print("- 4. End of user's dump\n")
-        
+
     print("+++ All users retrieved : Total unique user : ", len(usersEmail),"+++\n")
     for user in usersEmail:
-        f = open("userGraphAPI_Emails.txt", "a")
-        f.write(user+"\n")
-        f.close()
+        with open("userGraphAPI_Emails.txt", "a") as f:
+            f.write(user+"\n")
     print("+++ Dump File : userGraphAPI_Emails.txt file +++")
 
 def initialRequest(uri,auth):

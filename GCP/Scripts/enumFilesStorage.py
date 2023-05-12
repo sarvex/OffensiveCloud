@@ -12,7 +12,7 @@ import sys
 import concurrent.futures
 from colorama import Fore, Style
 
-endpoint = "https://storage.googleapis.com/"+sys.argv[1]+"/"
+endpoint = f"https://storage.googleapis.com/{sys.argv[1]}/"
 wordlist = open("./wordlist.txt")
 
 def scanBucket(endpoint,wordlist):
@@ -28,7 +28,7 @@ def scanBucket(endpoint,wordlist):
             print ("Access Denied : " + name.strip("\n"))
 
         elif r.status_code == 200:
-            print (Fore.GREEN + "============> Valid file found : " + name.strip("\n"))
+            print(f"{Fore.GREEN}============> Valid file found : " + name.strip("\n"))
             with open('./validFiles.txt', 'a+') as f:
                 f.write(url)
             print (Style.RESET_ALL)
